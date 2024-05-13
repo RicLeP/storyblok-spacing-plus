@@ -4,5 +4,5 @@ import FieldPluginExample from './components/FieldPluginExample/index.vue'
 </script>
 
 <template>
-  <FieldPluginExample />
+  <FieldPlugin />
 </template>
