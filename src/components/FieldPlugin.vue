@@ -1,6 +1,7 @@
 <script setup>
 import { useFieldPlugin } from '@storyblok/field-plugin/vue3'
-import { computed, onMounted, reactive, ref, watch } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import { createFieldPlugin } from '@storyblok/field-plugin'
 
 createFieldPlugin({
@@ -71,13 +72,6 @@ const handleSizeClick = (size, type, side) => {
 const handleSave = () => {
   plugin.actions.setContent(selectedSizes)
 }
-
-onMounted(() => {
-  // TODO - improve this - this is a workaround to set the initial selected breakpoint
-  setTimeout(() => {
-    handleBreakpointClick(breakpoints.find(breakpoint => breakpoint.size === 's'))
-  }, 100)
-})
 
 watch(() => plugin.type,
   (type) => {
