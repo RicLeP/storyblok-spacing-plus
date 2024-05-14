@@ -1,7 +1,6 @@
 <script setup>
 import { useFieldPlugin } from '@storyblok/field-plugin/vue3'
 import { computed, reactive, ref, watch } from 'vue'
-import { computed, reactive, ref, watch } from 'vue'
 import { createFieldPlugin } from '@storyblok/field-plugin'
 
 createFieldPlugin({
