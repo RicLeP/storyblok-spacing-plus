@@ -1,8 +1,24 @@
-<script setup lang="ts">
+<script setup>
 import { useFieldPlugin } from '@storyblok/field-plugin/vue3'
 import { computed, onMounted, reactive, ref } from 'vue'
+import { createFieldPlugin } from '@storyblok/field-plugin'
+
+createFieldPlugin({
+  onUpdateState: (response) => {
+    if (response.data.content) {
+      Object.assign(selectedSizes, response.data.content)
+    }
+  },
+})
 
 const plugin = useFieldPlugin()
+
+// const plugin = useFieldPlugin({
+//   validateContent: (content) => ({
+//     content: typeof content === 'object' ? content : selectedSizes,
+//   }),
+// })
+
 
 const breakpoints = [
   { size: 's', label: 'Small' },
@@ -47,12 +63,20 @@ const handleBreakpointClick = (breakpoint) => {
 }
 
 const handleSizeClick = (size, type, side) => {
-  // Update the selected size for the current breakpoint
   selectedSizes[selectedBreakpoint.value.size][type][side] = size.size
+
+  handleSave()
+}
+
+const handleSave = () => {
+  plugin.actions.setContent(selectedSizes)
 }
 
 onMounted(() => {
-  handleBreakpointClick(breakpoints.find(breakpoint => breakpoint.size === 's'))
+  // TODO - improve this - this is a workaround to set the initial selected breakpoint
+  setTimeout(() => {
+    handleBreakpointClick(breakpoints.find(breakpoint => breakpoint.size === 's'))
+  }, 100)
 })
 
 </script>
@@ -87,6 +111,11 @@ onMounted(() => {
     <option value="" disabled selected>Please select size</option>
     <option v-for="size in availableSizes" :key="size.size" :value="size">{{ size.label }}</option>
   </select>
+
+1
+  <pre>
+  </pre>
+2
 
   <pre>
     {{ JSON.stringify(selectedSizes, null, 2) }}
