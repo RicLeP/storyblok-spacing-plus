@@ -1,6 +1,6 @@
 <script setup>
 import { useFieldPlugin } from '@storyblok/field-plugin/vue3'
-import { computed, onMounted, reactive, ref } from 'vue'
+import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { createFieldPlugin } from '@storyblok/field-plugin'
 
 createFieldPlugin({
@@ -79,45 +79,212 @@ onMounted(() => {
   }, 100)
 })
 
+watch(() => plugin.type,
+  (type) => {
+    if (type === 'loaded') {
+      handleBreakpointClick(breakpoints.find(breakpoint => breakpoint.size === 's'))
+    }
+  },
+)
+
 </script>
 
 <template>
-  <button v-for="breakpoint in breakpoints" :key="breakpoint.size" @click="handleBreakpointClick(breakpoint)">
-    {{ breakpoint.label }}
-  </button>
+  <h2 class="title">Breakpoint</h2>
 
-  <h2>Selected breakpoint: {{ selectedBreakpoint.label }}</h2>
+  <div class="button-group">
+    <button
+      v-for="breakpoint in breakpoints"
+      :key="breakpoint.size"
+      @click="handleBreakpointClick(breakpoint)"
+      class="button-group__button"
+      :class="{ 'button-group__button--active': selectedBreakpoint.size === breakpoint.size }"
+    >
+      {{ breakpoint.label }}
+    </button>
+  </div>
 
-  <h2>Selected size for top margin:</h2>
-  <select v-model="selectedTopMargin" @change="handleSizeClick(selectedTopMargin, 'margin', 'top')">
-    <option value="" disabled selected>Please select size</option>
-    <option v-for="size in availableSizes" :key="size.size" :value="size">{{ size.label }}</option>
-  </select>
+  <div class="box-model">
+    <p class="box-model__title">Margin</p>
 
-  <h2>Selected size for bottom margin:</h2>
-  <select v-model="selectedBottomMargin" @change="handleSizeClick(selectedBottomMargin, 'margin', 'bottom')">
-    <option value="" disabled selected>Please select size</option>
-    <option v-for="size in availableSizes" :key="size.size" :value="size">{{ size.label }}</option>
-  </select>
+    <label class="select">
+      <span class="select__label">Top:</span>
 
-  <h2>Selected size for top padding:</h2>
-  <select v-model="selectedTopPadding" @change="handleSizeClick(selectedTopPadding, 'padding', 'top')">
-    <option value="" disabled selected>Please select size</option>
-    <option v-for="size in availableSizes" :key="size.size" :value="size">{{ size.label }}</option>
-  </select>
+      <select v-model="selectedTopMargin" @change="handleSizeClick(selectedTopMargin, 'margin', 'top')"
+              class="select__control">
+        <option value="" disabled selected>Please select size</option>
+        <option v-for="size in availableSizes" :key="size.size" :value="size">{{ size.label }}</option>
+      </select>
+    </label>
 
-  <h2>Selected size for bottom padding:</h2>
-  <select v-model="selectedBottomPadding" @change="handleSizeClick(selectedBottomPadding, 'padding', 'bottom')">
-    <option value="" disabled selected>Please select size</option>
-    <option v-for="size in availableSizes" :key="size.size" :value="size">{{ size.label }}</option>
-  </select>
+    <div class="box-model__padding">
+      <p class="box-model__title">Padding</p>
 
-1
-  <pre>
-  </pre>
-2
+      <label class="select">
+        <span class="select__label">Top:</span>
 
-  <pre>
-    {{ JSON.stringify(selectedSizes, null, 2) }}
-  </pre>
+        <select v-model="selectedTopPadding" @change="handleSizeClick(selectedTopPadding, 'padding', 'top')"
+                class="select__control">
+          <option value="" disabled selected>Please select size</option>
+          <option v-for="size in availableSizes" :key="size.size" :value="size">{{ size.label }}</option>
+        </select>
+      </label>
+
+      <div class="box-model__content">
+        Content
+      </div>
+
+      <label class="select">
+        <span class="select__label">Bottom:</span>
+
+        <select v-model="selectedBottomPadding" @change="handleSizeClick(selectedBottomPadding, 'padding', 'bottom')"
+                class="select__control">
+          <option value="" disabled selected>Please select size</option>
+          <option v-for="size in availableSizes" :key="size.size" :value="size">{{ size.label }}</option>
+        </select>
+      </label>
+    </div>
+
+    <label class="select">
+      <span class="select__label">Bottom:</span>
+
+      <select v-model="selectedBottomMargin" @change="handleSizeClick(selectedBottomMargin, 'margin', 'bottom')"
+              class="select__control">
+        <option value="" disabled selected>Please select size</option>
+        <option v-for="size in availableSizes" :key="size.size" :value="size">{{ size.label }}</option>
+      </select>
+    </label>
+  </div>
 </template>
+
+<style lang="postcss" scoped>
+
+.title {
+  margin: 0 0 7px;
+
+  color: var(--sb_dark_blue_75);
+  font-size: 12px;
+  font-weight: normal;
+  text-align: center;
+}
+
+.button-group {
+  display: flex;
+
+  justify-content: center;
+
+  margin-bottom: 16px;
+
+  border-radius: 5px;
+}
+
+.button-group__button {
+  padding: 8px 10px;
+
+  background-color: var(--sb_green_25);
+  border: none;
+
+  font-family: inherit;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  &:first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+  }
+
+  &:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+
+  &:hover {
+    background-color: var(--sb_green_50);
+  }
+
+  &:hover, &:active {
+    background-color: var(--sb_green);
+
+    color: #fff;
+  }
+}
+
+.button-group__button--active {
+  background-color: var(--sb_green);
+
+  color: #fff;
+}
+
+.box-model {
+  padding: 20px;
+
+  background-color: #fff;
+  border: 1px solid #dbdde2;
+  border-radius: 8px;
+
+  text-align: center;
+}
+
+.box-model__title {
+  margin: 0 0 7px;
+
+  color: var(--sb_dark_blue_75);
+  font-size: 12px;
+}
+
+.box-model__padding {
+  margin: 20px 0;
+  padding: 20px 20px;
+
+  background-color: var(--light_50);
+  border-radius: 5px;
+}
+
+.box-model__content {
+  margin: 20px 0;
+  padding: 10px;
+
+  background-color: var(--light);
+  border-radius: 5px;
+
+  color: var(--sb_dark_blue_75);
+  font-size: 12px;
+}
+
+.select {
+  display: flex;
+  gap: 10px;
+
+  align-items: center;
+  justify-content: center;
+}
+
+.select__label {
+  width: 43px;
+
+  color: var(--sb_dark_blue_75);
+  font-size: 12px;
+  text-align: right;
+}
+
+.select__control {
+  --webkit-appearance: none;
+  --appearance: none;
+
+  padding: 4px 8px;
+
+  background-color: #fff;
+  border: 1px solid var(--light_gray);
+  border-radius: 5px;
+
+  font-size: 12px;
+
+  &:hover {
+    border-color: var(--sb_green);
+
+    cursor: pointer;
+  }
+}
+
+</style>
