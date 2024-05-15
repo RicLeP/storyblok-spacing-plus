@@ -83,70 +83,72 @@ watch(() => plugin.type,
 </script>
 
 <template>
-  <h2 class="title">Breakpoint</h2>
+  <div v-if="plugin.type === 'loaded'">
+    <h2 class="title">Breakpoint</h2>
 
-  <div class="button-group">
-    <button
-      v-for="breakpoint in breakpoints"
-      :key="breakpoint.size"
-      @click="handleBreakpointClick(breakpoint)"
-      class="button-group__button"
-      :class="{ 'button-group__button--active': selectedBreakpoint.size === breakpoint.size }"
-    >
-      {{ breakpoint.label }}
-    </button>
-  </div>
+    <div class="button-group">
+      <button
+        v-for="breakpoint in breakpoints"
+        :key="breakpoint.size"
+        @click="handleBreakpointClick(breakpoint)"
+        class="button-group__button"
+        :class="{ 'button-group__button--active': selectedBreakpoint.size === breakpoint.size }"
+      >
+        {{ breakpoint.label }}
+      </button>
+    </div>
 
-  <div class="box-model">
-    <p class="box-model__title">Margin</p>
-
-    <label class="select">
-      <span class="select__label">Top:</span>
-
-      <select v-model="selectedTopMargin" @change="handleSizeClick(selectedTopMargin, 'margin', 'top')"
-              class="select__control">
-        <option value="" disabled selected>Please select size</option>
-        <option v-for="size in availableSizes" :key="size.size" :value="size">{{ size.label }}</option>
-      </select>
-    </label>
-
-    <div class="box-model__padding">
-      <p class="box-model__title">Padding</p>
+    <div class="box-model">
+      <p class="box-model__title">Margin</p>
 
       <label class="select">
         <span class="select__label">Top:</span>
 
-        <select v-model="selectedTopPadding" @change="handleSizeClick(selectedTopPadding, 'padding', 'top')"
+        <select v-model="selectedTopMargin" @change="handleSizeClick(selectedTopMargin, 'margin', 'top')"
                 class="select__control">
           <option value="" disabled selected>Please select size</option>
           <option v-for="size in availableSizes" :key="size.size" :value="size">{{ size.label }}</option>
         </select>
       </label>
 
-      <div class="box-model__content">
-        Content
+      <div class="box-model__padding">
+        <p class="box-model__title">Padding</p>
+
+        <label class="select">
+          <span class="select__label">Top:</span>
+
+          <select v-model="selectedTopPadding" @change="handleSizeClick(selectedTopPadding, 'padding', 'top')"
+                  class="select__control">
+            <option value="" disabled selected>Please select size</option>
+            <option v-for="size in availableSizes" :key="size.size" :value="size">{{ size.label }}</option>
+          </select>
+        </label>
+
+        <div class="box-model__content">
+          Content
+        </div>
+
+        <label class="select">
+          <span class="select__label">Bottom:</span>
+
+          <select v-model="selectedBottomPadding" @change="handleSizeClick(selectedBottomPadding, 'padding', 'bottom')"
+                  class="select__control">
+            <option value="" disabled selected>Please select size</option>
+            <option v-for="size in availableSizes" :key="size.size" :value="size">{{ size.label }}</option>
+          </select>
+        </label>
       </div>
 
       <label class="select">
         <span class="select__label">Bottom:</span>
 
-        <select v-model="selectedBottomPadding" @change="handleSizeClick(selectedBottomPadding, 'padding', 'bottom')"
+        <select v-model="selectedBottomMargin" @change="handleSizeClick(selectedBottomMargin, 'margin', 'bottom')"
                 class="select__control">
           <option value="" disabled selected>Please select size</option>
           <option v-for="size in availableSizes" :key="size.size" :value="size">{{ size.label }}</option>
         </select>
       </label>
     </div>
-
-    <label class="select">
-      <span class="select__label">Bottom:</span>
-
-      <select v-model="selectedBottomMargin" @change="handleSizeClick(selectedBottomMargin, 'margin', 'bottom')"
-              class="select__control">
-        <option value="" disabled selected>Please select size</option>
-        <option v-for="size in availableSizes" :key="size.size" :value="size">{{ size.label }}</option>
-      </select>
-    </label>
   </div>
 </template>
 
